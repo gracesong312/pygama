@@ -331,7 +331,7 @@ and a field mask.</p>
 </dl>
 <p>to read the block of entries starting at entry. In case of multiple files
 or the use of an event selection, entry refers to a global event index
-accros files and does not count events that are excluded by the selection.</p>
+across files and does not count events that are excluded by the selection.</p>
 <dl class="simple">
 <dt>This can also be used as an iterator:</dt><dd><dl class="simple">
 <dt>for lh5_obj, entry, n_rows in LH5Iterator(...):</dt><dd><p>do the thing!</p>
@@ -405,7 +405,7 @@ in lh5_file. Return None if it is a scalar/struct.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Name of the lh5 object to be read (including its group path)</p></li>
 <li><p><strong>lh5_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>h5py File object</em><em>, or </em><em>a list of either</em>) -- The file(s) containing the object to be read oad out. If a list of
-files, array-like object data will be contatenated into the output
+files, array-like object data will be concatenated into the output
 object</p></li>
 <li><p><strong>start_row</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> (</em><em>optional</em><em>)</em>) -- Starting entry for the object read (for array-like objects). For a
 list of files, only applies to the first file.</p></li>
@@ -631,7 +631,7 @@ Note: no copy is performed, the objects are used directly.</p></li>
 <p>Holds onto an internal read/write location &quot;loc&quot; that is useful in managing
 table I/O using functions like push_row(), is_full(), and clear()</p>
 <p>Note: if you write to a table and don't fill it up to its total size, be
-sure to resize it before passing to data processing fucntions, as they will
+sure to resize it before passing to data processing functions, as they will
 call len(table) to access valid data, which returns table.size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

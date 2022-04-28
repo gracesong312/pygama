@@ -162,7 +162,7 @@ table.</p>
 <section id="module-pygama.raw.data_decoder">
 <span id="pygama-raw-data-decoder-module"></span><h2>pygama.raw.data_decoder module<a class="headerlink" href="#module-pygama.raw.data_decoder" title="Permalink to this headline"></a></h2>
 <p>data_decoder.py</p>
-<p>base classe for decoding data into raw lgdo tables / files</p>
+<p>base classes for decoding data into raw lgdo tables / files</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pygama.raw.data_decoder.DataDecoder">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygama.raw.data_decoder.</span></span><span class="sig-name descname"><span class="pre">DataDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">garbage_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">packet_size_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygama.raw.data_decoder.DataDecoder" title="Permalink to this definition"></a></dt>
@@ -530,7 +530,7 @@ Socket example: '198.0.0.100:8000'</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pygama.raw.raw_buffer.RawBuffer.out_name">
 <span class="sig-name descname"><span class="pre">out_name</span></span><a class="headerlink" href="#pygama.raw.raw_buffer.RawBuffer.out_name" title="Permalink to this definition"></a></dt>
-<dd><p>the name / identifier of the object in the ouput stream</p>
+<dd><p>the name / identifier of the object in the output stream</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> (optional)</p>
@@ -593,11 +593,11 @@ names of decoders that can write to them</p>
 </div></blockquote>
 <p>}</p>
 <p>By default &quot;name&quot; is used for the RawBuffer's &quot;out_name&quot; attribute, but
-this can be overrided if desired by providing an explicit &quot;out_name&quot;</p>
-<p>Allowed shorthands, in order of exapansion:
+this can be overridden if desired by providing an explicit &quot;out_name&quot;</p>
+<p>Allowed shorthands, in order of expansion:
 * key_list may have entries that are 2-integer lists corresponding to</p>
 <blockquote>
-<div><p>the first and last integer keys in a continguous range (e.g. of
+<div><p>the first and last integer keys in a contiguous range (e.g. of
 channels) that get stored to the same buffer. These simply get
 replaced with the explicit list of integers in the range. We use lists
 not tuples for json compliance.</p>

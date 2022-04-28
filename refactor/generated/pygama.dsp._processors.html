@@ -668,7 +668,7 @@ the identified initial rise times of peaks in the signal</p>
 an aferpulse peak's tp0 to be sent to 0 or the same index as the tp0 for the first pulse.
 This only happens when the relative minimum between the first pulse and
 the afterpulse is greater than the threshold. So, we sweep through the array again
-to ensure there are no duplicate indices. If there are duplicate indicies caused by a
+to ensure there are no duplicate indices. If there are duplicate indices caused by a
 misidentified tp0 of an afterpulse, we replace its index by that of the corresponding minimum
 found using the get_multi_local_extrema function. It also checks to make sure that the maximum of a waveform
 isn't right at index 0.
@@ -678,7 +678,7 @@ t_in : array-like</p>
 <div><p>The array of indices that we want to remove duplicates from</p>
 </div></blockquote>
 <dl class="simple">
-<dt>vt_min_in<span class="classifier">array-like</span></dt><dd><p>List of indicies of minima that we want to replace duplicates in t_out with</p>
+<dt>vt_min_in<span class="classifier">array-like</span></dt><dd><p>List of indices of minima that we want to replace duplicates in t_out with</p>
 </dd>
 <dt>t_out: array-like</dt><dd><p>The array we want to return that will have no duplicate indices in it</p>
 </dd>
