@@ -977,6 +977,9 @@ class DataLoader:
             entry_list = self.build_entry_list(
                 tcm_level=tcm_level, save_output_columns=True
             )
+            
+        if len(entry_list) == 0:
+            raise ValueError("Entry list is empty - could not find data that satisfied all inputs")
 
         if not in_memory and output_file is None:
             raise ValueError("if in_memory is False, need to specify an output file")
