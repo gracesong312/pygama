@@ -1176,7 +1176,6 @@ class DataLoader:
                 table_length = len(f_entries)
 
                 log.debug(f"will load new columns {field_mask}")
-                # print(f"will load new columns {field_mask}")
 
                 # loop through each table in entry list and
                 # loop through each level we're asked to load from
@@ -1189,12 +1188,9 @@ class DataLoader:
                     # loop over tiers in the level
                     for tier in self.tiers[level]:
                         if tb not in col_tiers[file]["tables"][tier]:
-                            # print(f"Cannot find table {tb} in col_tiers tier {tier}")
+                            log.debug(f"Cannot find table {tb} in col_tiers tier {tier}")
                             continue
-
-                        # print(
-                        #    f"...for stream '{self.filedb.get_table_name(tier, tb)}' (at {level} level)"
-                        # )                        
+                     
                         log.debug(
                             f"...for stream '{self.filedb.get_table_name(tier, tb)}' (at {level} level)"
                         )
@@ -1589,12 +1585,10 @@ class DataLoader:
                     for tier in self.tiers[level]:
                         col_tiers[file]["tables"][tier] = []
                         tier_col_idx = self.filedb.df.loc[file, f"{tier}_col_idx"]
-                        # print(f"{tier}_col_idx: {tier_col_idx}")
                         if tier_col_idx is not None:
                             # Loop over tables
                             for i in range(len(tier_col_idx)):
                                 col_idx = self.filedb.df.loc[file, f"{tier}_col_idx"][i]
-                                # print(f"col_idx: {col_idx}")
                                 if col_idx in col_inds:
                                     col_tiers[file]["tables"][tier].append(
                                         self.filedb.df.loc[file, f"{tier}_tables"][i]
