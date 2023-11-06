@@ -505,6 +505,8 @@ class DataLoader:
 
         # Find out which columns are needed for any cuts
         cut_cols = {}
+        # ... and pre-load which tiers need to be loaded to make the cuts
+        col_tiers_dict = {}
 
         for level in [child, parent]:
             cut_cols[level] = []
@@ -527,6 +529,9 @@ class DataLoader:
                             and save_output_columns
                         ):
                             for_output.append(term)
+            col_tiers_dict[level] = self.get_tiers_for_col(
+                cut_cols[level], merge_files=False
+            )
 
         if save_output_columns:
             entry_cols += for_output
@@ -605,16 +610,24 @@ class DataLoader:
 
             # Perform cuts specified for child or parent level, in that order
             for level in [child, parent]:
-                if self.cuts is None or level not in self.cuts.keys():
-                    continue
-                cut = self.cuts[level]
-                col_tiers = self.get_tiers_for_col(cut_cols[level], merge_files=False)
+                # Extract the cut condition if given, otherwise set to ""
+                cut = ""
+                if self.cuts is not None:
+                    if level in self.cuts.keys():
+                        cut = self.cuts[level]
+
+                col_tiers = col_tiers_dict[level]
 
                 # Tables in first tier of event should be the same for all tiers in one level
                 tables = self.filedb.df.loc[file, f"{self.tiers[level][0]}_tables"]
                 if self.table_list is not None:
                     if level in self.table_list.keys():
                         tables = self.table_list[level]
+                    else:
+                        continue
+                if tables is None:
+                    continue
+
                 # Cut any rows of TCM not relating to requested tables
                 if level == parent:
                     f_entries.query(f"{level}_table in {tables}", inplace=True)
@@ -873,8 +886,13 @@ class DataLoader:
                     tb_df[f"{low_level}_idx"] = tb_df.index
 
                 # final DataFrame
-                f_entries = pd.concat((f_entries, tb_df), ignore_index=True)[entry_cols]
-                # end tb loop
+                if f_entries.empty:
+                    f_entries = tb_df
+                else:
+                    f_entries = pd.concat((f_entries, tb_df), ignore_index=True)[
+                        entry_cols
+                    ]
+
             if self.merge_files:
                 f_entries["file"] = file
             if in_memory:
