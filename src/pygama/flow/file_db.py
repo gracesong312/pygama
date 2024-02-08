@@ -226,7 +226,7 @@ class FileDB:
             scan_dirs = [dirs]
 
         log.info(f"scanning {scan_dirs} with template {template}")
-
+        print(f"scanning {scan_dirs} with template {template}")
         for scan_dir in scan_dirs:
             # some logic to guess where the scan directory is
             if not os.path.isabs(scan_dir):
@@ -240,9 +240,11 @@ class FileDB:
                     scan_dir = os.path.join(os.getcwd(), scan_dir)
 
             log.debug(f"scanning {scan_dir}")
+            print(f"scanning {scan_dir}")
 
             for path, _, files in os.walk(scan_dir):
                 log.debug(f"scanning {path}")
+                print(f"scanning {path}")
                 n_files += len(files)
 
                 for f in files:
