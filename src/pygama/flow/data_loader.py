@@ -584,7 +584,7 @@ class DataLoader:
 
             tcm_table_name = self.filedb.get_table_name(tcm_tier, tcm_tb)
             try:
-                tcm_lgdo, _ = sto.read_object(tcm_table_name, tcm_path)
+                tcm_lgdo, _ = sto.read(tcm_table_name, tcm_path)
             except KeyError:
                 log.warning(f"Cannot find table {tcm_table_name} in file {tcm_path}")
                 continue
@@ -649,7 +649,7 @@ class DataLoader:
                             if tb in col_tiers[file]["tables"][tier]:
                                 table_name = self.filedb.get_table_name(tier, tb)
                                 try:
-                                    tier_table, _ = sto.read_object(
+                                    tier_table, _ = sto.read(
                                         table_name,
                                         tier_path,
                                         field_mask=cut_cols[level],
@@ -862,7 +862,7 @@ class DataLoader:
                             # load the data from the tier file, just the columns needed for the cut
                             table_name = self.filedb.get_table_name(tier, tb)
                             try:
-                                tier_tb, _ = sto.read_object(
+                                tier_tb, _ = sto.read(
                                     table_name, tier_path, field_mask=cut_cols
                                 )
                             except KeyError:
@@ -1120,7 +1120,7 @@ class DataLoader:
                         for file in files
                     ]
 
-                    tier_table, _ = sto.read_object(
+                    tier_table, _ = sto.read(
                         name=tb_name,
                         lh5_file=tier_paths,
                         idx=idx_mask,
@@ -1224,7 +1224,7 @@ class DataLoader:
                             raise FileNotFoundError(tier_path)
 
                         table_name = self.filedb.get_table_name(tier, tb)
-                        tier_table, _ = sto.read_object(
+                        tier_table, _ = sto.read(
                             table_name,
                             tier_path,
                             idx=idx_mask,
@@ -1322,7 +1322,7 @@ class DataLoader:
                                 )
                                 if os.path.exists(tier_path):
                                     table_name = self.filedb.get_table_name(tier, tb)
-                                    tier_table, _ = sto.read_object(
+                                    tier_table, _ = sto.read(
                                         table_name,
                                         tier_path,
                                         idx=idx_mask,

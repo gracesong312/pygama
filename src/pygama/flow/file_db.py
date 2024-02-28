@@ -536,7 +536,7 @@ class FileDB:
 
         # loop over the files
         for p in paths:
-            cfg, _ = sto.read_object("config", p)
+            cfg, _ = sto.read("config", p)
             cfg = json.loads(cfg.value.decode())
 
             # make sure configurations are all the same
@@ -548,7 +548,7 @@ class FileDB:
                 )
 
             # read in unique columns
-            vov, _ = sto.read_object("columns", p)
+            vov, _ = sto.read("columns", p)
             # Convert back from VoV of UTF-8 bytestrings to a list of lists of strings
             columns = [[v.decode("utf-8") for v in ov] for ov in list(vov)]
 
