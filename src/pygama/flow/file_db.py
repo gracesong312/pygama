@@ -151,6 +151,7 @@ class FileDB:
         names = list(np.unique(names))
         names += [f"{tier}_file" for tier in self.tiers]  # the generated file names
         names += [f"{tier}_size" for tier in self.tiers]  # file sizes
+
         names += ["file_status"]  # bonus columns
 
         self.df = pd.DataFrame(columns=names)
@@ -225,7 +226,7 @@ class FileDB:
             scan_dirs = [dirs]
 
         log.info(f"scanning {scan_dirs} with template {template}")
-
+        print(f"scanning {scan_dirs} with template {template}")
         for scan_dir in scan_dirs:
             # some logic to guess where the scan directory is
             if not os.path.isabs(scan_dir):
@@ -239,9 +240,11 @@ class FileDB:
                     scan_dir = os.path.join(os.getcwd(), scan_dir)
 
             log.debug(f"scanning {scan_dir}")
+            print(f"scanning {scan_dir}")
 
             for path, _, files in os.walk(scan_dir):
                 log.debug(f"scanning {path}")
+                print(f"scanning {path}")
                 n_files += len(files)
 
                 for f in files:
@@ -271,13 +274,13 @@ class FileDB:
 
         # fill the main DataFrame
         self.df = pd.concat([self.df, temp_df])
-
+        
         # convert cols to numeric dtypes where possible
         for col in self.df.columns:
-            try:
-                self.df[col] = pd.to_numeric(self.df[col])
-            except ValueError:
-                continue
+            self.df[col] = pd.to_numeric(self.df[col], errors="ignore")
+            
+        # Remove duplicates in the 'sortby' column 
+        self.df.drop_duplicates(subset=[self.sortby], inplace=True, ignore_index=True)
 
         # sort rows according to timestamps
         utils.inplace_sort(self.df, self.sortby)
@@ -361,16 +364,15 @@ class FileDB:
         """
         log.info("getting table column names")
 
-        if self.columns is not None:
-            if not override:
-                log.warning(
-                    "LH5 tables/columns names already set, if you want to perform the scan anyway, set override=True"
-                )
-                return
-            else:
-                log.warning("overwriting existing LH5 tables/columns names")
+        if override:
+            log.warning("overwriting existing LH5 tables/columns names")
 
         def update_tables_cols(row, tier: str, utc_cache: dict = None) -> pd.Series:
+            # Skip this row if it already has values and override is false
+            if set([f"{tier}_tables", f"{tier}_col_idx"]).issubset(self.df.columns):
+                if not override and not row[[f"{tier}_tables", f"{tier}_col_idx"]].isnull().any():
+                    return row[[f"{tier}_tables", f"{tier}_col_idx"]]
+            
             fpath = os.path.join(
                 self.data_dir,
                 self.tier_dirs[tier].lstrip("/"),
@@ -451,7 +453,10 @@ class FileDB:
                 utc_cache[this_dir] = series
             return series
 
-        columns = []
+        if self.columns is None:
+            columns = []
+        else:
+            columns = self.columns
 
         # set up a cache to provide a fast option if all files in each directory
         # are expected to all have the same cols

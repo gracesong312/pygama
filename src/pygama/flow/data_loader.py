@@ -1008,6 +1008,9 @@ class DataLoader:
             entry_list = self.build_entry_list(
                 tcm_level=tcm_level, save_output_columns=True
             )
+            
+        if len(entry_list) == 0:
+            raise ValueError("Entry list is empty - could not find data that satisfied all inputs")
 
         if not in_memory and output_file is None:
             raise ValueError("if in_memory is False, need to specify an output file")
@@ -1199,8 +1202,9 @@ class DataLoader:
                     # loop over tiers in the level
                     for tier in self.tiers[level]:
                         if tb not in col_tiers[file]["tables"][tier]:
+                            log.debug(f"Cannot find table {tb} in col_tiers tier {tier}")
                             continue
-
+                     
                         log.debug(
                             f"...for stream '{self.filedb.get_table_name(tier, tb)}' (at {level} level)"
                         )

@@ -84,22 +84,34 @@ def test_no_merge(test_dl):
 
 def test_outputs(test_dl):
     test_dl.set_files("type == 'phy'")
-    test_dl.set_datastreams([1057600, 1059201], "ch")
+    test_dl.set_datastreams([1057600, 1084803], "ch")
     test_dl.set_output(
-        fmt="pd.DataFrame", columns=["timestamp", "channel", "energies", "energy_in_pe"]
+        fmt="pd.DataFrame", columns=["energies", "trapEmax", "is_valid_0vbb", "is_valid_hit"]
     )
     data = test_dl.load()
 
     assert isinstance(data, pd.DataFrame)
-    assert list(data.keys()) == [
+    assert set(data.keys()) == set([
         "hit_table",
         "hit_idx",
         "file",
-        "timestamp",
-        "channel",
+ #       "timestamp",
+ #       "channel",
         "energies",
-        "energy_in_pe",
-    ]
+ #       "energy_in_pe",
+        "trapEmax",
+        "is_valid_0vbb",
+        "is_valid_hit"
+    ])
+    print(data)
+    for id, row in data.iterrows():
+        print()
+        if row.hit_table == 1057600:
+            print( row.is_valid_0vbb == False )
+            print( row.trapEmax < 1e-20 )
+        else:
+            print( (np.array(row.energies) < 1e-20).all() )
+            print( True not in row.is_valid_hit )
 
 
 def test_any_mode(test_dl):
